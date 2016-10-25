@@ -21,3 +21,4 @@ for station in parsed['results']:
 #GHCND:USW00013722 - is not in the dataset
 #COOP:317069
 
+print('hello')
