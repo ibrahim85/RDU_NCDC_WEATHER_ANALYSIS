@@ -25,7 +25,7 @@ def year_loop(start,end, by):
 			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 			print(url)
 	
-print(year_loop(1946, 2017, 10))
+print(year_loop(1946, 2016, 10))
 
 
 #url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=2006-01-01&enddate=2016-01-01&limit=100&datatypeid=PRCP&datatypeid=TAVG'
