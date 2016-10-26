@@ -6,10 +6,12 @@ import pandas as pd
 
 def return_results(url):
 
-	headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' }
+	#headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two tokens man
+	#headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
+
 	response = requests.get(url, headers=headers)
 	parsed=json.loads(response.text)
-
+	print(parsed)
 	year=[]
 	PRCP=[]
 	TAVG=[]
@@ -38,25 +40,22 @@ def year_loop(start,end, by):
 	
 	ranges=np.arange(start, end+1, by)
     
-	for i in range(len(ranges)-1):
+	for i in range(len(ranges)-2):
 		
 		year, PRCP, TAVG = return_results(url)
-
+		print(url,i)
 		year_c.extend(year)
 		PRCP_c.extend(PRCP)
 		TAVG_c.extend(TAVG)
 		
-		if i==6:
-			pass
+		url=url.replace(str(ranges[i+1]),str(ranges[i+2]))
+		url=url.replace(str(ranges[i]),str(ranges[i+1]))
 
-		else:
-			url=url.replace(str(ranges[i+1]),str(ranges[i+2]))
-			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 
 	return year_c, PRCP_c, TAVG_c
 		
 	
-year_c, PRCP_c, TAVG_c = year_loop(1946, 2017, 10)
+year_c, PRCP_c, TAVG_c = year_loop(1946, 2016, 10)
 
 results=pd.DataFrame({
 	'year': year_c,

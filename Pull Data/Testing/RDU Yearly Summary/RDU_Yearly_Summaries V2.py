@@ -38,28 +38,31 @@ def year_loop(start,end, by):
 	
 	ranges=np.arange(start, end+1, by)
     
-	for i in range(len(ranges)-2):
+	for i in range(len(ranges)-1):
 		
 		year, PRCP, TAVG = return_results(url)
-		print(url,i)
+
 		year_c.extend(year)
 		PRCP_c.extend(PRCP)
 		TAVG_c.extend(TAVG)
 		
-		url=url.replace(str(ranges[i+1]),str(ranges[i+2]))
-		url=url.replace(str(ranges[i]),str(ranges[i+1]))
+		if i==6:
+			pass
 
+		else:
+			url=url.replace(str(ranges[i+1]),str(ranges[i+2]))
+			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 
 	return year_c, PRCP_c, TAVG_c
 		
 	
 year_c, PRCP_c, TAVG_c = year_loop(1946, 2016, 10)
 
-results=pd.DataFrame({
+results2=pd.DataFrame({
 	'year': year_c,
 	'PRCP': PRCP_c,
 	'TAVG': TAVG_c
 	})
 
-print(results)
+print(results2)
 

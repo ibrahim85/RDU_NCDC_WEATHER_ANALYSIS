@@ -10,6 +10,7 @@ import pandas as pd
 
 url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=2006-01-01&enddate=2016-01-01&limit=100&datatypeid=PRCP&datatypeid=TAVG' #Avg Temp and Precipitation per month at rdu
 headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' }
+#headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
 
 #Execute call and parse response
 response = requests.get(url, headers=headers)

@@ -12,7 +12,7 @@ f=np.arange(1946,2017,10)
 
 def year_loop(start,end, by):
 
-	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=1946-01-01&enddate=1956-01-01&limit=100&datatypeid=PRCP&datatypeid=TAVG'
+	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=1946-01-01&enddate=1955-01-01&limit=100&datatypeid=PRCP&datatypeid=TAVG'
 
 	ranges=np.arange(start, end+1, by)
     
@@ -21,7 +21,7 @@ def year_loop(start,end, by):
 		if i==6:
 			break
 		else:
-			url=url.replace(str(ranges[i+1]),str(ranges[i+2]))
+			url=url.replace(str(ranges[i+1]-1),str(ranges[i+2]-1))
 			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 			print(url)
 	
