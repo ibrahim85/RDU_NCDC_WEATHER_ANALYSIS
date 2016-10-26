@@ -11,8 +11,8 @@ import pandas as pd
 
 def return_results(url):
 
-	#headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
-	headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
+	headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
+	#headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
 	response = requests.get(url, headers=headers)
 	parsed=json.loads(response.text)
 
@@ -72,4 +72,5 @@ results2=pd.DataFrame({
 
 results2['Year']=results2['Year'].map(lambda x: x[:4])
 print(results2)
-#results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_weather.csv')
+
+#results2.to_csv('C:/Programming/Python/NCDC Weather Data/Data/yearly_rdu_weather.csv')
