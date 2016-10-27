@@ -37,3 +37,5 @@ results=pd.DataFrame({
 	})
 
 print(results)
+
+#results.to_csv('C:/programming/Analyses/Weather Data/Datasets/LSU_Weather.csv')
