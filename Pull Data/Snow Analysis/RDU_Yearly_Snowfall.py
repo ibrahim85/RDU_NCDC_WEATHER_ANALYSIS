@@ -148,5 +148,5 @@ results2=pd.DataFrame({
 	})
 
 results2['Year']=results2['Year'].map(lambda x: x[:4])
-
+print(results)
 #results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')

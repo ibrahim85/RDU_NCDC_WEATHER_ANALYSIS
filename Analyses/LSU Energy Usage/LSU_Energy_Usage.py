@@ -15,7 +15,6 @@ weather['TAVG_faren']=weather['TAVG'].map(lambda x: round(x*(9/5) + 32,2))
 del weather['year']
 del weather['Unnamed: 0']
 
-
 def print_graph(x,y,y2,y3):  
     x_scale=list(range(1,len(x)+1))
 

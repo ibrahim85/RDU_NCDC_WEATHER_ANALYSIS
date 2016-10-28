@@ -15,7 +15,9 @@ labels=['AVG Temp C', 'Cooling Degree Days','# Days max temp <32F','MinTemp', 'M
 targets=['Snow', 'No Snow']
 
 
-snow=pd.read_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')
+#snow=pd.read_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')
+#snow=pd.read_csv('C:/programming/Analyses/Weather Data/Datasets/combined_rdu_reagan_snow.csv') #RDU + Reagan
+snow=pd.read_csv('C:/programming/Analyses/Weather Data/Datasets/snow/combined_rdu_reagan_clt_snow.csv')
 del snow['Unnamed: 0']
 snow['NO_SNOW_FLAG']=(snow['SNOW']==0).astype(int)
 
@@ -44,6 +46,6 @@ print(accuracy, "Accuracy DT")
 
 dot_data = tree.export_graphviz(dt, out_file=None, feature_names=labels, class_names=targets, filled=True, rounded=True) 
 graph = pydotplus.graph_from_dot_data(dot_data) 
-#graph.write_pdf("C:/Programming/Analyses/Weather Data/Datasets/Outcomes/RDU_snow.pdf") 
-display(Image(graph.create_png()))
+graph.write_pdf("C:/Programming/Analyses/Weather Data/Datasets/Outcomes/RDU_Reagn_clt_snow.pdf") 
+#display(Image(graph.create_png()))
 

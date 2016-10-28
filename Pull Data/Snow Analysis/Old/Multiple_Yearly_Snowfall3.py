@@ -1,7 +1,10 @@
-####Python Script to pull Daily Summaries for RDU ####
-#Fix incorrect date looping
-#Fix year in final datasest
-#Author - Andrew Kramer#
+#url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=id_code&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+#code='GHCND:USW00013743'
+
+#url=url.replace('id_code', code)
+#print(url)
+
+#GHCND:USW00013743
 
 import math 
 import numpy as np
@@ -75,7 +78,7 @@ def return_results(url):
 	return year, SNOW, TAVG, CLDD, DX32, TMIN, TMAX, HTDD, DX90, DP01, DP05, DT32, FZF0, PRCP
 
 
-def year_loop(start,end, by):
+def year_loop(start,end, by, code):
 	
 	year_c=[] #Year
 	SNOW_c=[] #Snowfall in mm
@@ -92,7 +95,9 @@ def year_loop(start,end, by):
 	FZF0_c=[] #Temp first freeze < 32
 	PRCP_c=[] #Precipitation for period
 
-	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	#url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013743&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=id_code&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	url=url.replace('id_code', code)
 
 	ranges=np.arange(start, end+1, by)
     
@@ -122,28 +127,50 @@ def year_loop(start,end, by):
 			url=url.replace(str(ranges[i+1]-1),str(ranges[i+2]-1))
 			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 
-	return year_c, SNOW_c, TAVG_c, CLDD_c, DX32_c, TMIN_c, TMAX_c, HTDD_c, DX90_c, DP01_c, DP05_c, DT32_c, FZF0_c, PRCP_c
-		
-	
-year_c, SNOW_c, TAVG_c, CLDD_c, DX32_c, TMIN_c, TMAX_c, HTDD_c, DX90_c, DP01_c, DP05_c, DT32_c, FZF0_c, PRCP_c = year_loop(1946, 2016, 10)
+	results_df=pd.DataFrame({
+		'Year': year_c,
+		'SNOW': SNOW_c,
+		'TAVG': TAVG_c,
+		'CLDD': CLDD_c,
+		'DX32': DX32_c,
+		'TMIN': TMIN_c, 
+		'TMAX': TMAX_c,
+		'HTDD': HTDD_c, 
+		'DX90': DX90_c,
+		'DP01': DP01_c,
+		'DP05': DP05_c, 
+		'DT32': DT32_c, 
+		'FZF0': FZF0_c,
+	    'PRCP': PRCP_c
+		})
 
-results2=pd.DataFrame({
-	'Year': year_c,
-	'SNOW': SNOW_c,
-	'TAVG': TAVG_c,
-	'CLDD': CLDD_c,
-	'DX32': DX32_c,
-	'TMIN': TMIN_c, 
-	'TMAX': TMAX_c,
-	'HTDD': HTDD_c, 
-	'DX90': DX90_c,
-	'DP01': DP01_c,
-	'DP05': DP05_c, 
-	'DT32': DT32_c, 
-	'FZF0': FZF0_c,
-    'PRCP': PRCP_c
-	})
+	results_df['Year']=results_df['Year'].map(lambda x: x[:4])
 
-results2['Year']=results2['Year'].map(lambda x: x[:4])
+	return results_df
 
-#results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')
+#loop_df = year_loop(1946, 2016, 10)
+
+#print(loop_df.head())
+
+
+site_name=['RDU','Reagan_Intl']
+site_id=['GHCND:USW00013722','GHCND:USW00013743']
+
+
+
+
+
+loop_df_rdu = year_loop(1946,2016,10,site_id[0])
+loop_df_rdu['Location']=site_name[0]
+print(loop_df_rdu.head())
+loop_df_rea=year_loop(1946,2016,10,site_id[1])
+loop_df_rea['Location']=site_name[1]
+
+#API_data=pd.concat([API_Data, loop_df], axis=0)
+#API_data=API_Data.append(loop_df)
+#print(loop_df.head())
+#print(API_Data.head())
+
+API_Data=pd.concat([loop_df_rdu, loop_df_rea], axis=0)
+
+API_Data.to_csv('C:/programming/Analyses/Weather Data/Datasets/combined_rdu_reagan_snow.csv')

@@ -1,7 +1,10 @@
-####Python Script to pull Daily Summaries for RDU ####
-#Fix incorrect date looping
-#Fix year in final datasest
-#Author - Andrew Kramer#
+#url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=id_code&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+#code='GHCND:USW00013743'
+
+#url=url.replace('id_code', code)
+#print(url)
+
+#GHCND:USW00013743
 
 import math 
 import numpy as np
@@ -11,8 +14,8 @@ import pandas as pd
 
 def return_results(url):
 
-	#headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
-	headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
+	headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
+	#headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
 	response = requests.get(url, headers=headers)
 	parsed=json.loads(response.text)
 
@@ -75,7 +78,7 @@ def return_results(url):
 	return year, SNOW, TAVG, CLDD, DX32, TMIN, TMAX, HTDD, DX90, DP01, DP05, DT32, FZF0, PRCP
 
 
-def year_loop(start,end, by):
+def year_loop(start,end, by, code):
 	
 	year_c=[] #Year
 	SNOW_c=[] #Snowfall in mm
@@ -92,7 +95,9 @@ def year_loop(start,end, by):
 	FZF0_c=[] #Temp first freeze < 32
 	PRCP_c=[] #Precipitation for period
 
-	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	#url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013743&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=id_code&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	url=url.replace('id_code', code)
 
 	ranges=np.arange(start, end+1, by)
     
@@ -123,27 +128,83 @@ def year_loop(start,end, by):
 			url=url.replace(str(ranges[i]),str(ranges[i+1]))
 
 	return year_c, SNOW_c, TAVG_c, CLDD_c, DX32_c, TMIN_c, TMAX_c, HTDD_c, DX90_c, DP01_c, DP05_c, DT32_c, FZF0_c, PRCP_c
-		
+
+
+
+#loop_df = year_loop(1946, 2016, 10)
+
+
+
+site_name=['RDU','Reagan_Intl']
+site_id=['GHCND:USW00013722','GHCND:USW00013743']
+
+def final_loop(site_name, site_id):
+
+	year=[] #Year
+	SNOW=[] #Snowfall in mm
+	TAVG=[] #AVG temp in C
+	CLDD=[] #Cooling Degree Days
+	DX32=[] #Number of days with max temp < 32F
+	TMIN=[] #Min Temp in period
+	TMAX=[] #Max temp in period
+	HTDD=[] #Heating Degree Days
+	DX90=[] #Days max temp > 90  ###
+	DP01=[] #Days > .1 inch of precipitation
+	DP05=[] #Days > .5 inch of precipitation
+	DT32=[] #Days with min temp < 32 ###
+	FZF0=[] #Temp first freeze < 32
+	PRCP=[] #Precipitation for period
+	#ORIGIN=[]
+
+
+
+#for site in site_id:
+	for i in range(len(site_id)):
 	
-year_c, SNOW_c, TAVG_c, CLDD_c, DX32_c, TMIN_c, TMAX_c, HTDD_c, DX90_c, DP01_c, DP05_c, DT32_c, FZF0_c, PRCP_c = year_loop(1946, 2016, 10)
+		year_c, SNOW_c, TAVG_c, CLDD_c, DX32_c, TMIN_c, TMAX_c, HTDD_c, DX90_c, DP01_c, DP05_c, DT32_c, FZF0_c, PRCP_c = year_loop(1946,2016,10,site_id[i])
 
-results2=pd.DataFrame({
-	'Year': year_c,
-	'SNOW': SNOW_c,
-	'TAVG': TAVG_c,
-	'CLDD': CLDD_c,
-	'DX32': DX32_c,
-	'TMIN': TMIN_c, 
-	'TMAX': TMAX_c,
-	'HTDD': HTDD_c, 
-	'DX90': DX90_c,
-	'DP01': DP01_c,
-	'DP05': DP05_c, 
-	'DT32': DT32_c, 
-	'FZF0': FZF0_c,
-    'PRCP': PRCP_c
-	})
 
-results2['Year']=results2['Year'].map(lambda x: x[:4])
+		year.extend(year_c)
+		SNOW.extend(SNOW_c)
+		TAVG.extend(TAVG_c)
+		CLDD.extend(CLDD_c)
+		DX32.extend(DX32_c)
+		TMIN.extend(TMIN_c)
+		TMAX.extend(TMAX_c)
+		HTDD.extend(HTDD_c)
+		DX90.extend(DX90_c)
+		DP01.extend(DP01_c)
+		DP05.extend(DP05_c)
+		DT32.extend(DT32_c)
+		FZF0.extend(FZF0_c)
+		PRCP.extend(PRCP_c)
+		#ORIGIN.extend(np.zeros(69)+i)
 
-#results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')
+
+
+	results_df=pd.DataFrame({
+		'Year': year_c,
+		'SNOW': SNOW_c,
+		'TAVG': TAVG_c,
+		'CLDD': CLDD_c,
+		'DX32': DX32_c,
+		'TMIN': TMIN_c, 
+		'TMAX': TMAX_c,
+		'HTDD': HTDD_c, 
+		'DX90': DX90_c,
+		'DP01': DP01_c,
+		'DP05': DP05_c, 
+		'DT32': DT32_c, 
+		'FZF0': FZF0_c,
+	    'PRCP': PRCP_c
+	    #'ORIGIN': ORIGIN
+		})
+
+	results_df['Year']=results_df['Year'].map(lambda x: x[:4])
+
+	return results_df
+		
+API_Data=final_loop(site_name, site_id)
+
+
+API_Data.to_csv('C:/programming/Analyses/Weather Data/Datasets/combined_rdu_reagan_snow.csv')

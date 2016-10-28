@@ -9,7 +9,7 @@ import requests
 #url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/datasets' #All available datasets
 #url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/datasets/GSOY?stationid=GHCND:USW00013722' #info on one specific dataset f
 
-#url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/datasets?stationid=GHCND:USW00013722'  #RDU Datasets Avaialble
+url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/datasets?stationid=GHCND:USW00013722'  #RDU Datasets Avaialble
 headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' }
 
 #Execute call and parse response

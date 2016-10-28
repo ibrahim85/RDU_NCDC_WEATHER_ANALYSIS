@@ -11,8 +11,8 @@ import pandas as pd
 
 def return_results(url):
 
-	#headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
-	headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
+	headers = {'token': 'dKuJxEKlhIJuoZSjvKULivIPXWsRqspt' } #Two api keys, 1000 request limit/day
+	#headers = {'token': 'HGQwYMutaGbKyJUqOZchjtieVMKpMMTE'}
 	response = requests.get(url, headers=headers)
 	parsed=json.loads(response.text)
 
@@ -74,6 +74,9 @@ def return_results(url):
 
 	return year, SNOW, TAVG, CLDD, DX32, TMIN, TMAX, HTDD, DX90, DP01, DP05, DT32, FZF0, PRCP
 
+#year, SNOW, TAVG, CLDD, DX32, TMIN, TMAX, HTDD, DX90, DP01, DP05, DT32, FZF0, PRCP = return_results('http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013743&startdate=1946-01-01&enddate=1955-01-01&limit=1000')
+#print(year, SNOW, TAVG, CLDD, DX32, TMIN, TMAX, HTDD, DX90, DP01, DP05, DT32, FZF0, PRCP)
+
 
 def year_loop(start,end, by):
 	
@@ -92,7 +95,7 @@ def year_loop(start,end, by):
 	FZF0_c=[] #Temp first freeze < 32
 	PRCP_c=[] #Precipitation for period
 
-	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013722&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
+	url='http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GSOY&stationid=GHCND:USW00013881&startdate=1946-01-01&enddate=1955-01-01&limit=1000'
 
 	ranges=np.arange(start, end+1, by)
     
@@ -145,5 +148,6 @@ results2=pd.DataFrame({
 	})
 
 results2['Year']=results2['Year'].map(lambda x: x[:4])
-
-#results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_rdu_snow.csv')
+results2['Location']='Charlotte, NC'
+print(results2.head())
+results2.to_csv('C:/programming/Analyses/Weather Data/Datasets/yearly_charlotte_nc_snow.csv')
