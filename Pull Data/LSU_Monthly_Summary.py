@@ -38,4 +38,8 @@ results=pd.DataFrame({
 
 print(results)
 
+<<<<<<< HEAD
 #results.to_csv('C:/Programming/Python/NCDC Weather Data/Data/monthly_lsu_weather.csv')
+=======
+#results.to_csv('C:/programming/Analyses/Weather Data/Datasets/LSU_Weather.csv')
+>>>>>>> origin/master
